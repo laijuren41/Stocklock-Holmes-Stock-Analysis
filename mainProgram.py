@@ -607,7 +607,6 @@ def main():
     collectData()
     gettingPredictedPriceStocks()
     calCoefandInsertIntoDB()
-    #driver.save_screenshot('testing.png')
     return;
 
 
