@@ -1,0 +1,84 @@
+
+{% extends "entry/header.html" %}
+
+{% block nav_profile%}
+    class="active"
+{% endblock %}
+
+{% block content %}
+
+  <body style="background-color: #16627C;">
+
+  	<div class="container">
+		<div class="card card-login mx-auto mt-5" style="width: 30rem;">
+			<div class="card-header">Register</div>
+			
+				<div class="card-body">
+					<div class="register">
+				
+							<form class="form" role="form" autocomplete="off" action="{% url 'register' %}" method="post">
+								{% csrf_token %}	
+								<div class="form">
+									<p>
+									{{ form.username.label }}
+									<br>
+									{{ form.username }}
+									<br>
+									{{ form.password1.label }}
+									<br>
+									{{ form.password1 }}
+									<br>
+									{{ form.password2.label }}
+									<br>
+									{{ form.password2 }}
+									<br>
+									<br>
+									<input type="submit" name="submit" value="Register" class="btn btn-primary btn-login"/>
+									</p>
+								</div>
+							</form>
+
+							{% if form.errors %}
+
+							{% for field in form %}
+							{% for error in field.errors %}
+							    <div class="alert alert-danger">
+							        <strong>{{ error|escape }}</strong>
+							    </div>
+							{% endfor %}
+
+							{% endfor %}
+							{% for error in form.non_field_errors %}
+							<div class="alert alert-danger">
+							    <strong>{{ error|escape }}</strong>
+							</div>
+							{% endfor %}
+							
+							{% endif %}
+					</div>
+				
+				<div class="text-center">
+				  <a class="d-block small mt-3" href="{% url 'login' %}">Already registered?</a>
+				  <a class="d-block small" href="forgot-password.html">Forgot Password?</a>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	
+	<script >
+		$(document).ready(function(){
+			$("#id_username").attr('placeholder', '{{form.username.label}}');
+			$("#id_username").attr('class', 'form-control');
+			$("#id_password1").attr('placeholder', '{{form.password1.label}}');
+			$("#id_password1").attr('class', 'form-control');
+			$("#id_password2").attr('placeholder', '{{form.password2.label}}');
+			$("#id_password2").attr('class', 'form-control');
+		});
+	</script>
+	<!--/container-->
+{% endblock %}	
+			
+
+
+

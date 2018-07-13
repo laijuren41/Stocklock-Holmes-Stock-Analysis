@@ -1,0 +1,128 @@
+{% extends "app/header.html" %}
+
+{% block nav_home%}
+    class="active"
+{% endblock %}
+
+{% block content %}
+<!-- MAIN CODE -->
+<!-- START -->
+
+<ol class="breadcrumb">
+	<li class="breadcrumb-item active"><a href="{% url 'prediction' %}">Prediction</a></li>
+</ol>
+
+
+<div class="row">
+
+	<div class="col">
+
+		<div class="card mt-2">
+
+			<div class="card-header">
+            	Uptrend Stocks
+            </div>
+
+			<div class="card-body">
+				
+
+				<table id="uptrendtable" class="table table-hover">
+					<thead class="table-success">
+					  <tr>
+						<th>Symbol</th>
+						<th>Name</th>
+					  </tr>
+					</thead>
+
+				</table>
+						  
+				
+			</div>
+		</div>
+
+
+		<div class="card mt-4">
+
+			<div class="card-header">
+            	Downtrend Stocks
+            </div>
+
+			<div class="card-body">
+				
+				<table id="downtrendtable" class="table table-hover">
+					<thead class="table-danger">
+					  <tr>
+						<th>Symbol</th>
+						<th>Name</th>
+					  </tr>
+					</thead>
+
+				</table>
+						  
+				
+			</div>			
+		</div>
+
+
+	</div>
+		
+</div>
+
+<script>
+	
+$(document).ready(function() {
+
+	var uptable = $('#uptrendtable').DataTable( {
+	             "processing": true,
+	             "searching": true,
+	             "ajax": {
+	                 "processing": true,
+	                 "url": "{% url 'uptrendData' %}",
+	                 "dataSrc": ""
+	             },
+
+	             "columns": [
+	                     { "data": "company_name" },
+	                     { "data": "companyfullname" }
+
+	                 ]
+	 } );
+
+	 var downtable = $('#downtrendtable').DataTable( {
+	             "processing": true,
+	             "searching": true,
+	             "ajax": {
+	                 "processing": true,
+	                 "url": "{% url 'downtrendData' %}",
+	                 "dataSrc": ""
+	             },
+
+	             "columns": [
+	                     { "data": "company_name" },
+	                     { "data": "companyfullname" }
+
+	                 ]
+	 } );
+
+
+	 $('#uptrendtable').on('click', 'tr', function () {
+        var data = uptable.row( this ).data();
+        
+        window.location.href="/stock/?q="+ data.company_name
+
+    } );
+
+
+     $('#downtrendtable').on('click', 'tr', function () {
+        var data = downtable.row( this ).data();
+        
+        window.location.href="/stock/?q="+ data.company_name
+
+    } );
+
+} );
+</script>
+
+
+{% endblock %}	
+			

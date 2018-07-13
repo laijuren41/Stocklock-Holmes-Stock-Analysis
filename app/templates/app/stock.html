@@ -1,0 +1,478 @@
+{% extends "app/header.html" %}
+
+{% block nav_home%}
+    class="active"
+{% endblock %}
+
+{% block content %}
+<!-- MAIN CODE -->
+<!-- START -->
+
+
+<ol class="breadcrumb">
+	<li class="breadcrumb-item">Stock</li>
+	<li class="breadcrumb-item active">{{ stocks.company.company_name }}</li>
+</ol>
+
+
+<div class="row">
+	
+	<div class="col">
+		<div class="card">
+
+
+
+			<div class="card-body">
+
+				{% if predictedStock.coefficient > 0 %}
+					<p style="color: green;">UPTREND</p>
+				{% elif predictedStock.coefficient < 0 %}
+					<p style="color: red;"">DOWNTREND</p>
+				{% else %}
+					<p> NEUTRAL</p>
+				{% endif %}
+
+				<h1 class="h2">{{ stocks.company.company_name }} </h1>
+				<h6>{{ stocks.company.companyfullname }}</h6>
+				<p style="font-size: 30px; font-weight: bold;">{{ stocks.companyprice }} </p>
+				<br>
+
+				<nav>
+				<div class="nav nav-tabs" id="nav-tab" role="tablist">
+					<a class="nav-item nav-link active" id="nav-stock-tab" data-toggle="tab" href="#nav-stock" role="tab" aria-controls="nav-home" aria-selected="true">Stock Info</a>
+					<a class="nav-item nav-link" id="nav-prediction-tab" data-toggle="tab" href="#nav-prediction" role="tab" aria-controls="nav-profile" aria-selected="false">Prediction-3day</a>
+					
+				</div>
+				</nav>
+
+				<div class="tab-content" id="nav-tabContent">
+					<div class="tab-pane fade show active" id="nav-stock" role="tabpanel" aria-labelledby="nav-stock-tab">
+						<div class="row" style="margin-top: 15px;">
+
+							<div class="col-xl-3">
+								<div class="card">
+									<div class="card-header">
+						            	Stock Information
+						            </div>
+
+						            <div class="card-body">
+
+						            	<table>
+
+										<tr>
+										    <td>Name:</td>
+										    <td><span style="font-weight:bold">{{ stocks.company.company_name }}</span></td>
+										</tr>
+										<tr>
+										    <td>Price:</td>
+										    <td><span style="font-weight:bold">{{ stocks.companyprice }}</span></td>
+										</tr>
+										<tr>
+										    <td>Volume:</td>
+										    <td><span style="font-weight:bold">{{ stocks.companyvolume }}</span></td>
+										</tr>
+										<tr>
+										    <td>EPS:</td>
+										    <td><span style="font-weight:bold">{{ stocks.companyeps }}</span></td>
+										</tr>
+										<tr>
+										    <td>DPS:</td>
+										    <td><span style="font-weight:bold">{{ stocks.companydps }}</span></td>
+										</tr>
+										<tr>
+										    <td>NTA:</td>
+										    <td><span style="font-weight:bold">{{ stocks.companynta }}</span></td>
+										</tr>
+										<tr>
+										    <td>PE:</td>
+										    <td><span style="font-weight:bold">{{ stocks.companype }}</span></td>
+										</tr>
+										<tr>
+										    <td>DY:</td>
+										    <td><span style="font-weight:bold">{{ stocks.companydy }}</span></td>
+										</tr>
+										<tr>
+										    <td>ROE:</td>
+										    <td><span style="font-weight:bold">{{ stocks.companyroe }}</span></td>
+										</tr>
+										<tr>
+										    <td>PTBV:</td>
+										    <td><span style="font-weight:bold">{{ stocks.companyptbv }}</span></td>
+										</tr>
+										<tr>
+										    <td>MCap.(M):</td>
+										    <td><span style="font-weight:bold">{{ stocks.companymcap }}</span></td>
+										</tr>
+										<tr>
+										    <td>Category:</td>
+										    <td><span style="font-weight:bold">{{ stocks.company.company_categories }}</span></td>
+										</tr>
+
+
+										</table>
+										<!--
+						            	<p>  </p>
+										<p>Code:  {{ stocks.info_id }}</p>
+										
+										<p>Price:  {{ stocks.companyprice }}</p>
+									
+										<p>Volume:  {{ stocks.companyvolume }}</p>
+									
+										<p>EPS:  {{ stocks.companyeps }}</p>
+									
+										<p>DPS:  {{ stocks.companydps }}</p>
+									
+										<p>NTA:  {{ stocks.companynta }}</p>
+									
+										<p>PE:  {{ stocks.companype }}</p>
+									
+										<p>DY:  {{ stocks.companydy }}</p>
+									
+										<p>ROE:  {{ stocks.companyroe }}</p>
+									
+										<p>PTBV:  {{ stocks.companyptbv }}</p>
+									
+										<p>MCap.(M):  {{ stocks.companymcap }}</p>-->
+						            </div>
+								</div>
+							</div>
+
+							<div class="col-xl-9">
+
+								<div class="card">
+									<div class="card-header">
+						            	Stock Chart
+						            </div>
+
+						            <div class="card-body">
+						            	<canvas class="my-4 chartjs-render-monitor" id="sales-chart" width="500" height="150" style="display: block; width: 500px; height: 150px;"></canvas>
+						            </div>
+								</div>
+
+									
+							</div>							
+
+						</div>
+
+						
+					
+					</div>
+
+
+				<div class="tab-pane fade" id="nav-prediction" role="tabpanel" aria-labelledby="nav-prediction-tab">
+				
+					<div class="row" style="margin-top: 15px;">
+						<div class="col">
+							<div class="card">
+								<div class="card-header">
+					            	Prediction Chart
+					            </div>
+
+					            <div class="card-body">
+					            	<canvas class="my-4 chartjs-render-monitor" id="prediction-chart" width="700" height="150" style="display: block; width: 500px; height: 150px;"></canvas>
+					            </div>
+							</div>
+						</div>
+					</div>
+							  
+				  
+				</div>
+				<div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">...</div>
+
+			</div>
+		</div>
+	</div>
+</div>		
+				
+<script>
+
+	{%  block jquery %}
+
+
+	var day1 = "{{ day1 }}";
+	var day2 = "{{ day2 }}";
+	var day3 = "{{ day3 }}";
+
+	day1 = day1.slice(0, 6);
+	day2 = day2.slice(0, 6);
+	day3 = day3.slice(0, 6);
+
+	var endpoint = '../../api/data/{{ stocks.company.company_id }}/'
+	var priceData = []
+	var labels = []
+	var fullData = []
+
+	var lastSevenPrice = []
+	var lastSevenLabel = []
+	var lastSevenPredict = []
+
+	$.ajax({
+		method: "GET",
+		url: endpoint,
+
+		success: function(data){
+
+
+			var x = data.companys.length - 7;
+			var count = 0;
+
+			// Get all the data
+			for(var i = 0;i < data.companys.length; i++)
+			{
+				//console.log(data.companys[i].companyprice)
+				labels[i] = data.companys[i].datetimecollect;
+				priceData[i] = data.companys[i].companyprice;
+
+				labels[i] = labels[i].slice(0, 6);
+
+			}
+
+			for(var y = x; y < data.companys.length; y++)
+			{
+
+				lastSevenLabel[count] = data.companys[y].datetimecollect;
+				lastSevenPrice[count] = data.companys[y].companyprice;
+				lastSevenPredict[count] = null;
+
+				lastSevenLabel[count] = lastSevenLabel[count].slice(0, 6);
+
+				count++;
+			}
+
+			latestCurrPrice = data.companys[data.companys.length - 1].companyprice
+
+			lastSevenPredict[6] = latestCurrPrice;
+			lastSevenLabel[7] = day1;
+			lastSevenLabel[8] = day2;
+			lastSevenLabel[9] = day3;
+
+			console.log(lastSevenLabel);
+			console.log(lastSevenPrice);
+		
+		},
+		error: function(error_data){
+			console.log("error")
+			console.log(error_data)
+		}
+	})
+
+
+	var predictEndpoint = '../../api/predictdata/{{ stocks.company.company_id }}/'
+	//var priceData = []
+	//var labels = []
+	//var fullData = []
+
+	//var length = 14
+	var predictPrice = []
+
+	$.ajax({
+		method: "GET",
+		url: predictEndpoint,
+
+		success: function(data){
+
+			predictPrice[0] = data.priceday1;
+			predictPrice[1] = data.priceday2;
+			predictPrice[2] = data.priceday3;
+
+
+			lastSevenPredict[7] = data.priceday1;
+			lastSevenPredict[8] = data.priceday2;
+			lastSevenPredict[9] = data.priceday3;
+
+			console.log(lastSevenPredict);
+		},
+		error: function(error_data){
+			console.log("error")
+			console.log(error_data)
+		}
+	})
+
+	{% endblock %}
+
+	var ctx = document.getElementById("sales-chart");
+	ctx.height = 190;
+	var myChart = new Chart( ctx, {
+	    type: 'line',
+	    data: {
+	        labels: labels,
+	        type: 'line',
+	        defaultFontFamily: 'Montserrat',
+	        datasets: [ {
+	            label: "Price",
+	            lineTension: 0.1,
+	            data: priceData,
+	            fill: false,
+	            backgroundColor: 'transparent',
+	            borderColor: 'rgba(220,53,69,0.75)',
+	            borderWidth: 3,
+	            pointStyle: 'circle',
+	            pointRadius: 0,
+	            pointBorderColor: 'transparent',
+	            pointBackgroundColor: 'rgba(220,53,69,0.75)',
+	                }, ]
+	    },
+	    options: {
+	        responsive: true,
+	        maintainAspectRatio: true,
+
+	        tooltips: {
+	            mode: 'index',
+	            titleFontSize: 12,
+	            titleFontColor: '#000',
+	            bodyFontColor: '#000',
+	            backgroundColor: '#fff',
+	            titleFontFamily: 'Montserrat',
+	            bodyFontFamily: 'Montserrat',
+	            cornerRadius: 3,
+	            intersect: false,
+	        },
+	        legend: {
+	            display: false,
+	            labels: {
+	                usePointStyle: true,
+	                fontFamily: 'Montserrat',
+	            },
+	        },
+	        scales: {
+	            xAxes: [ {
+	            	
+
+	                display: true,
+	                gridLines: {
+	                    display: true,
+	                    drawBorder: true
+	                },
+	                scaleLabel: {
+	                    display: false,
+	                    labelString: 'Day'
+	                }
+
+	                    } ],
+	            yAxes: [ {
+	                display: true,
+	                gridLines: {
+	                    display: true,
+	                    drawBorder: true
+	                },
+	                scaleLabel: {
+	                    display: true,
+	                    labelString: 'Price'
+	                }
+	                    } ]
+	        },
+	        title: {
+	            display: false,
+	            text: 'Normal Legend'
+	        }
+
+
+	    }
+	} )
+
+	var ctx = document.getElementById("prediction-chart");
+	ctx.height = 190;
+	var predictionChart = new Chart( ctx, {
+	    type: 'line',
+	    data: {
+	        labels: lastSevenLabel,
+	        type: 'line',
+	        defaultFontFamily: 'Montserrat',
+	        datasets: [ {
+	            label: "Actual Price",
+	            lineTension: 0,
+	            data: lastSevenPrice,
+	            fill: false,
+	            backgroundColor: 'transparent',
+	            borderColor: 'rgba(220,53,69,0.75)',
+	            borderWidth: 3,
+	            pointStyle: 'circle',
+	            pointRadius: 0,
+	            pointBorderColor: 'transparent',
+	            pointBackgroundColor: 'rgba(220,53,69,0.75)',
+	                }, {
+
+
+	            label: "Predicted Price",
+	            lineTension: 0,
+	            data: lastSevenPredict,
+	            fill: false,
+	            backgroundColor: 'transparent',
+	            borderColor: 'rgba(0,0,255)',
+	            borderWidth: 3,
+	            pointStyle: 'circle',
+	            pointRadius: 0,
+	            pointBorderColor: 'transparent',
+	            pointBackgroundColor: 'rgba(0,0,255)',
+
+	            	},
+	                	]
+	    },
+	    options: {
+	        responsive: true,
+	        maintainAspectRatio: true,
+
+	        tooltips: {
+	            mode: 'index',
+	            titleFontSize: 12,
+	            titleFontColor: '#000',
+	            bodyFontColor: '#000',
+	            backgroundColor: '#fff',
+	            titleFontFamily: 'Montserrat',
+	            bodyFontFamily: 'Montserrat',
+	            cornerRadius: 3,
+	            intersect: false,
+	        },
+	        legend: {
+	            position: 'top',
+	  
+	        },
+	        scales: {
+	            xAxes: [ {
+	            	
+
+	                display: true,
+	                gridLines: {
+	                    display: true,
+	                    drawBorder: true
+	                },
+	                scaleLabel: {
+	                    display: false,
+	                    labelString: 'Day'
+	                }
+
+
+	                    } ],
+	            yAxes: [ {
+	                display: true,
+	                gridLines: {
+	                    display: true,
+	                    drawBorder: true
+	                },
+	                scaleLabel: {
+	                    display: true,
+	                    labelString: 'Price'
+	                },
+
+	                    } ]
+	        },
+	        title: {
+	            display: false,
+	            text: 'Normal Legend'
+	        }
+
+
+	    }
+	} );
+
+	setTimeout(function() { myChart.update(); }, 500);
+	setTimeout(function() { predictionChart.update(); }, 500);
+
+	
+
+</script>    
+
+
+
+{% endblock %}	
+			

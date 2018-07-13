@@ -1,0 +1,297 @@
+{% extends "app/header.html" %}
+
+{% block nav_home%}
+    class="active"
+{% endblock %}
+
+{% block content %}
+<!-- MAIN CODE -->
+<!-- START -->
+
+
+<ol class="breadcrumb">
+	<li class="breadcrumb-item active"><a href="{% url 'stockMarket' %}">Stock Market</a></li>
+</ol>
+       
+<div class="row">
+	
+
+	<div class="col">
+		<div class="card">
+
+			<div class="card-header">
+            	Stock Market
+            </div>
+
+			<div class="card-body">
+				
+				<!-- Button trigger modal -->
+				<button type="button" class="btn btn-outline-info waves-effect" data-toggle="modal" data-target="#addSymbolModal">
+				  Filter
+				</button>
+				<br>
+				<br>
+				<!--
+				<div class="dropdown">
+					<button class="btn btn-info dropdown-toggle btn-outline-info waves-effect" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+					Categories
+					</button>
+
+					<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+						<a class="dropdown-item" href="#">Most Active</a>
+						<a class="dropdown-item" href="#">Least Active</a>
+						<a class="dropdown-item" href="#">Top Gainers</a>
+						<a class="dropdown-item" href="#">Top Losers</a>
+					</div>
+				</div>-->
+
+				<!-- Modal -->
+				<div class="modal fade" id="addSymbolModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+					<div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+						<div class="modal-content">
+
+							<div class="modal-header">
+								<h5 class="modal-title" id="exampleModalLongTitle">Filter stocks</h5>
+								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								  <span aria-hidden="true">&times;</span>
+								</button>
+							</div>
+						  
+
+						 	<form action="{% url 'tableData' %}" method="POST">{%csrf_token%}<!--start of formquery-->
+								<div class="row">
+									<div class="col-2">
+									<h2 style="font: 16px Helvetica Neue,Helvetica,Arial,sans-serif; margin: 0.5em;">Market Cap:</h2>
+									</div>
+									<div class="col-9">
+										<div class="btn-group btn-group" style="font: 16px Helvetica Neue,Helvetica,Arial,sans-serif;">
+
+											<div class="form-check-inline">
+												<label class="form-check-label">
+													<input type="radio" id="mcap" href="#" name="mcap" value="1" class="form-check-input">Small Cap</input>
+												</label>
+											</div>
+
+											<div class="form-check-inline">
+												<label class="form-check-label">
+													<input type="radio" id="mcap" href="#" name="mcap" value="2" class="form-check-input">Mid Cap</input>
+												</label>
+											</div>
+
+											<div class="form-check-inline">
+												<label class="form-check-label">
+													<input type="radio" id="mcap" href="#" name="mcap" value="3" class="btn btn-outline-info waves-effect">Large Cap</input>
+												</label>
+											</div>
+
+											<div class="form-check-inline">
+												<label class="form-check-label">
+													<input type="radio" id="mcap" href="#" name="mcap" value="4" class="btn btn-outline-info waves-effect">Mega Cap</input>
+												</label>
+											</div>
+
+											
+										</div>
+									</div>
+								</div>
+								<br>
+								<div class="row">
+									<div class="col-2">
+									  <h2 style="font: 16px Helvetica Neue,Helvetica,Arial,sans-serif; margin: 0.5em;">   Sectors:   </h2>
+									</div>
+									<!--change the dropdown from bootstrap to normal select options-->
+									<!-- removed healthcare from the option-->
+									<div class="col-6">
+										<div class="dropdown">
+											<select name="cat" class="form-control">
+												<option name="cat" value="All"> All </option>
+												<option name="cat" value="Consumer"> Consumer Goods </option>
+												<option name="cat" value="Serv"> Services </option>
+												<option name="cat" value="Technology"> Technology </option>
+												<option name="cat" value="Finance"> Financial </option>
+												<option name="cat" value="Hotels"> Hotels </option>
+												<option name="cat" value="Ind"> Industrial Goods </option>
+											</select>
+										</div>
+									</div>
+								</div>
+								<br>
+								<div class="row">
+									<div class="col-2">
+									  <h2 style="font: 16px Helvetica Neue,Helvetica,Arial,sans-serif; margin: 0.5em;">Share price: </h2>
+									</div>
+									<div class="col-6">
+										<div class="dropdown">
+										  <select name="sp" class="form-control">
+										  	<option name="sp" value="0"> All </option>
+										  	<option name="sp" value="1">Up to RM1</option>
+										  	<option name="sp" value="2">Above RM1</option>
+										  </select>
+										</div>
+									</div>
+								</div>
+								<br>
+								<div class="row">
+									<div class="col-2">
+									  <h2 style="font: 16px Helvetica Neue,Helvetica,Arial,sans-serif; margin: 0.5em;">P/E: </h2>
+									</div>
+									
+									<!-- change the options to All, Low , Medium, High  -->
+									<div class="col-6">
+										<div class="dropdown">
+											
+											<select name="pe" class="form-control">
+												<option name="pe" value="0"> All </option>
+												<option name="pe" value="1"> Low </option>
+												<option name="pe" value="2"> Medium </option>
+												<option name="pe" value="3"> High </option>											
+											</select>
+											
+										</div>
+									</div>
+								</div>
+								<br>
+								<div class="row">
+									<div class="col-2" >
+									  <h2 style="font: 16px Helvetica Neue,Helvetica,Arial,sans-serif; margin: 0.5em;">EPS: </h2>
+									</div>
+									
+									<div class="col-6">
+										<div class="dropdown">
+											<!-- change to EPS filter -- >
+											<!-- change the options to All, Low , Medium, High  -->
+											<select name="eps" class="form-control">
+												<option name="eps" value="0"> All </option>
+												<option name="eps" value="1"> Low </option>
+												<option name="eps" value="2"> Medium </option>
+												<option name="eps" value="3"> High </option>	
+											</select>
+											
+										</div>
+									</div>
+								</div>
+									
+								<div class="row">
+									
+								</div>	
+
+							<!-- ng-click="saveData()"" -->
+							<div class="modal-footer">
+
+								<button type="submit" class="btn btn-secondary">Filter Stocks</button>						
+								
+								<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+							</div>
+
+							</form>
+
+						</div>
+					</div>
+				</div>
+
+
+				<br>
+
+
+				<div class="row">
+					<div class="col-sm">
+
+						<table id="datatable" class="table table-hover">
+					        <thead>
+					        <tr>
+					            <th>Name</th>
+					            <th>ID</th>
+					            <th>Categories</th>
+					            <th>Price</th>
+					            <th>Volume</th>
+					            <th>EPS</th>
+					            <th>DPS</th>
+					            <th>NTA</th>
+					            <th>PE</th>
+					            <th>DY</th>
+					            <th>ROE</th>
+					            <th>PTBV</th>
+					            <th>M.Cap</th>
+					        </tr>
+					        </thead>
+					        <tfoot>
+					        <tr>
+
+					        </tr>
+					        </tfoot>
+					    </table>
+
+
+					    <script>	
+					    	/*
+							$(document).ready(function() {
+							    var table = $('#datatable').DataTable( {
+								             "processing": true,
+								             "searching": false,
+								             "ajax": {
+								                 "processing": true,
+								                 "url": "{% url 'tableData' %}",
+								                 "dataSrc": ""
+								             },
+
+								             "columns": [
+								                     { "data": "company_name" },
+								                     { "data": "company_id" },
+								                     { "data": "companyprice" },
+								                     { "data": "companyvolume" },
+								                     { "data": "companyeps" },
+								                     { "data": "companydps" },
+								                     { "data": "companynta" },
+								                     { "data": "companype" },
+								                     { "data": "companydy" },
+								                     { "data": "companyroe" },
+								                     { "data": "companyptbv" },
+								                     { "data": "companymcap" }
+								                 ]
+								 } );*/
+		
+						    $(document).ready(function() {
+					    		var json = JSON.stringify({{data | safe}});
+						        var table = $('#datatable').DataTable({ 
+						        	"data": JSON.parse(json),
+						        	'searching': true,
+						        	 "columns": [
+						                     { "data": "company_name" },
+						                     { "data": "company_id" },
+						                     { "data": "company_categories"},
+						                     { "data": "companyprice" },
+						                     { "data": "companyvolume" },
+						                     { "data": "companyeps" },
+						                     { "data": "companydps" },
+						                     { "data": "companynta" },
+						                     { "data": "companype" },
+						                     { "data": "companydy" },
+						                     { "data": "companyroe" },
+						                     { "data": "companyptbv" },
+						                     { "data": "companymcap" }
+						                 ]
+						        });;
+
+
+						         $('#datatable tbody').on('click', 'tr', function () {
+							        var data = table.row( this ).data();
+							        
+							        window.location.href="/stock/?q="+ data.company_name
+
+							    } );
+
+
+						     } );
+
+					    </script>
+						
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+    
+
+{% endblock %}	
+			

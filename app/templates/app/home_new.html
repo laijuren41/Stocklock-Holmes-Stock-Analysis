@@ -1,0 +1,584 @@
+{% extends "app/header.html" %}
+
+{% block nav_home%}
+    class="active"
+{% endblock %}
+
+{% block content %}
+<!-- MAIN CODE -->
+<!-- START -->
+	
+
+	
+<ol class="breadcrumb">
+	<li class="breadcrumb-item"><a href="{% url 'home' %}">Dashboard</a></li>
+	<li class="breadcrumb-item active">My Dashboard</li>
+</ol>
+
+<div class="row">
+	<div class="col-xl-6 col-sm-6 mb-3">
+      <div class="card text-white bg-success o-hidden h-100">
+        <div class="card-body">
+
+          <div class="mr-5">Best Uptrend</div>
+          <h3>{{ bestUptrend.company.company_name }}</h3>
+          {{ bestUptrend.company.companyfullname }}
+          <canvas class="my-4 chartjs-render-monitor" id="uptrend-chart" width="800" height="150" style="display: block; width: 800px; height: 150px;"></canvas>
+        </div>
+        <a class="card-footer text-white clearfix small z-1" href="/stock/?q={{ bestUptrend.company.company_name }}">
+          <span class="float-left">View Details</span>
+          <span class="float-right">
+            <i class="fa fa-angle-right"></i>
+          </span>
+        </a>
+      </div>
+	</div>
+
+	<div class="col-xl-6 col-sm-6 mb-3">
+      <div class="card text-white bg-danger o-hidden h-100">
+        <div class="card-body">
+          <div class="mr-5">Worst Downtrend</div>
+          <h3>{{ worstDowntrend.company.company_name }}</h3>
+          {{ worstDowntrend.company.companyfullname }}
+          <canvas class="my-4 chartjs-render-monitor" id="downtrend-chart" width="800" height="150" style="display: block; width: 800px; height: 150px;"></canvas>
+        </div>
+        <a class="card-footer text-white clearfix small z-1" href="/stock/?q={{ worstDowntrend.company.company_name }}">
+          <span class="float-left">View Details</span>
+          <span class="float-right">
+            <i class="fa fa-angle-right"></i>
+          </span>
+        </a>
+      </div>
+	</div>
+</div>
+
+<div class="row">
+
+	<div class="col-md-6">
+		<div class="card mt-1">
+
+			<div class="card-header">
+            	Uptrend Stocks
+            </div>
+
+
+			<div class="card-body">
+	
+				<table class="table table-hover" class="uptrendtable" id="uptable">
+					<thead class="table-success">
+					  <tr>
+					  	<th>Symbol</th>
+						<th>Name</th>
+					  </tr>
+					</thead>
+
+
+					<tbody>
+					{% for item in uptrendStock %}
+						<tr class='clickable-row' >
+							<td class="symbol">{{ item.company.company_name }}</td>
+							<td>{{ item.company.companyfullname}}</td>
+						</tr>
+					{% endfor %}
+					</tbody>
+
+				</table>		
+			  	
+			  	<form action="{% url 'prediction' %}">
+					<button class="btn btn-info" type="submit" >
+						View All
+					</button>
+				</form>
+			
+			</div>
+		</div>
+	</div>
+  
+	<div class="col-md-6">
+		<div class="card mt-1">
+
+			<div class="card-header">
+            	Downtrend Stocks
+            </div>
+
+			<div class="card-body">
+
+				<table class="table table-hover" class="downtrendtable" id="downtable">
+					<thead class="table-danger">
+					  <tr>
+					  	<th>Symbol</th>
+						<th>Name</th>
+					  </tr>
+					</thead>
+
+
+					<tbody>
+					{% for item in downtrendStock %}
+						<tr class='clickable-row' >
+							<td class="symbol">{{ item.company.company_name }}</td>
+							<td>{{ item.company.companyfullname}}</td>
+						</tr>
+					{% endfor %}
+					</tbody>
+
+				</table>		
+			  	
+			  	<form action="{% url 'prediction' %}">
+					<button class="btn btn-info" type="submit" >
+						View All
+					</button>
+				</form>
+
+			</div>
+		</div>
+	</div>
+
+	
+  
+</div>		
+    
+{% if portfolio %}
+<div class="row">
+
+	<div class="col-md-12">
+		<div class="card mt-3">
+
+			<div class="card-header">
+            	My Portfolio
+            </div>
+
+			<div class="card-body">
+				
+
+				<table class="table table-hover" class="portfoliotable" id="porttable">
+					<thead class="thead-dark">
+					  <tr>
+					  	<th scope="col">Name</th>
+			            <th scope="col">Price</th>
+			            <th scope="col">Volume</th>
+			            <th scope="col">EPS</th>
+			            <th scope="col">DPS</th>
+			            <th scope="col">NTA</th>
+			            <th scope="col">PE</th>
+			            <th scope="col">DY</th>
+			            <th scope="col">ROE</th>
+			            <th scope="col">PTBV</th>
+			            <th scope="col">M.Cap</th>
+					  </tr>
+					</thead>
+
+
+					<tbody>
+					{% for item in portfolio %}
+						<tr class='clickable-row' >
+							<td class="symbol">{{ item.symbols }}</td>
+							<td>{{ item.portfolio_info.companyprice }}</td>
+							<td>{{ item.portfolio_info.companyvolume }}</td>
+							<td>{{ item.portfolio_info.companyeps }}</td>
+							<td>{{ item.portfolio_info.companydps }}</td>
+							<td>{{ item.portfolio_info.companynta }}</td>
+							<td>{{ item.portfolio_info.companype }}</td>
+							<td>{{ item.portfolio_info.companydy }}</td>
+							<td>{{ item.portfolio_info.companyroe }}</td>
+							<td>{{ item.portfolio_info.companyptbv }}</td>
+							<td>{{ item.portfolio_info.companymcap }}</td>
+						</tr>
+					{% endfor %}
+					</tbody>
+
+				</table>		
+			  	
+			  	<form action="{% url 'portfolio' %}">
+					<button class="btn btn-info" type="submit" >
+						View All
+					</button>
+				</form>				
+			
+			</div>
+		</div>
+	</div>
+
+</div>
+{% endif %}
+
+<script>
+
+	{%  block jquery %}
+
+	var day1 = "{{ day1 }}";
+	var day2 = "{{ day2 }}";
+	var day3 = "{{ day3 }}";
+
+	day1 = day1.slice(0, 6);
+	day2 = day2.slice(0, 6);
+	day3 = day3.slice(0, 6);
+
+	var uptrendEndpoint = '../../api/predictdata/{{ bestUptrend.company.company_id }}/'
+
+	var currUpEndpoint = '../../api/data/{{ bestUptrend.company.company_id }}/'
+
+
+	var uptrendPredict = []
+
+	var currLabelUptrend = []
+	var currPriceUptrend = []
+
+
+
+	$.ajax({
+		method: "GET",
+		url: currUpEndpoint,
+
+		success: function(data){
+
+			var x = data.companys.length - 7;
+			var count = 0;
+
+			for(var y = x; y < data.companys.length; y++)
+			{
+
+				currLabelUptrend[count] = data.companys[y].datetimecollect;
+				currPriceUptrend[count] = data.companys[y].companyprice;
+				uptrendPredict[count] = null;
+
+				currLabelUptrend[count] = currLabelUptrend[count].slice(0, 6);
+
+				count++;
+			}		
+
+			uptrendPredict[6] = data.companys[data.companys.length - 1].companyprice;
+			currLabelUptrend[7] = day1;
+			currLabelUptrend[8] = day2;
+			currLabelUptrend[9] = day3;
+
+		},
+		error: function(error_data){
+			console.log("error")
+			console.log(error_data)
+		}
+	})
+
+
+	$.ajax({
+		method: "GET",
+		url: uptrendEndpoint,
+
+		success: function(data){
+
+			uptrendPredict[7] = data.priceday1
+			uptrendPredict[8] = data.priceday2
+			uptrendPredict[9] = data.priceday2
+
+		},
+		error: function(error_data){
+			console.log("error")
+			console.log(error_data)
+		}
+	})
+
+
+
+
+	var downtrendEndpoint = '../../api/predictdata/{{ worstDowntrend.company.company_id }}/'
+
+	var currDownEndpoint = '../../api/data/{{ worstDowntrend.company.company_id }}/'
+
+
+	var downtrendPredict = []
+
+	var currLabelDowntrend = []
+	var currPriceDowntrend = []
+
+
+	$.ajax({
+		method: "GET",
+		url: currDownEndpoint,
+
+		success: function(data){
+
+			var x = data.companys.length - 7;
+			var count = 0;
+
+
+			for(var y = x; y < data.companys.length; y++)
+			{
+
+				currLabelDowntrend[count] = data.companys[y].datetimecollect;
+				currPriceDowntrend[count] = data.companys[y].companyprice;
+				downtrendPredict[count] = null; //Setting the first seven days of the prediction price to be null
+
+				currLabelDowntrend[count] = currLabelDowntrend[count].slice(0, 6);
+
+				count++;
+			}		
+
+			downtrendPredict[6] = data.companys[data.companys.length - 1].companyprice;
+			currLabelDowntrend[7] = day1;
+			currLabelDowntrend[8] = day2;
+			currLabelDowntrend[9] = day3;
+
+
+		},
+		error: function(error_data){
+			console.log("error")
+			console.log(error_data)
+		}
+	})
+
+
+	$.ajax({
+		method: "GET",
+		url: downtrendEndpoint,
+
+		success: function(data){
+
+			downtrendPredict[7] = data.priceday1
+			downtrendPredict[8] = data.priceday2
+			downtrendPredict[9] = data.priceday2
+
+
+		},
+		error: function(error_data){
+			console.log("error")
+			console.log(error_data)
+		}
+	})
+	{% endblock %}
+
+
+	var ctx = document.getElementById("uptrend-chart");
+	ctx.height = 190;
+	var uptrendChart = new Chart( ctx, {
+	    type: 'line',
+	    data: {
+	        labels: currLabelUptrend,
+	        type: 'line',
+	        defaultFontFamily: 'Montserrat',
+	        datasets: [ {
+	            label: "Actual Price",
+	            lineTension: 0.1,
+	            data: currPriceUptrend,
+	            fill: false,
+	            backgroundColor: 'transparent',
+	            borderColor: 'rgb(255,255,255)',
+	            borderWidth: 3,
+	            pointStyle: 'circle',
+	            pointRadius: 0,
+	            pointBorderColor: 'transparent',
+	            pointBackgroundColor: 'black',
+	                }, {
+
+	            label: "Predicted Price",
+	            lineTension: 0,
+	            data: uptrendPredict,
+	            fill: false,
+	            backgroundColor: 'transparent',
+	            borderColor: 'rgba(0,0,255)',
+	            borderWidth: 3,
+	            pointStyle: 'circle',
+	            pointRadius: 0,
+	            pointBorderColor: 'transparent',
+	            pointBackgroundColor: 'rgba(0,0,255)',
+
+	                },
+	                	]
+	    },
+	    options: {
+	        responsive: true,
+	        maintainAspectRatio: true,
+
+	        tooltips: {
+	            mode: 'index',
+	            titleFontSize: 12,
+	            titleFontColor: '#000',
+	            bodyFontColor: '#000',
+	            backgroundColor: '#fff',
+	            titleFontFamily: 'Montserrat',
+	            bodyFontFamily: 'Montserrat',
+	            cornerRadius: 3,
+	            intersect: false,
+	        },
+	        legend: {
+	            
+	            display:false,
+
+	        },
+	        scales: {
+	            xAxes: [ {
+	            	
+
+	                display: true,
+	                gridLines: {
+	                	color: 'rgb(255,255,255)',
+	                    display: false,
+	                    drawBorder: true
+	                },
+	                scaleLabel: {
+	                    display: false,
+	                    labelString: 'Day'
+	                },
+	                ticks: {
+                    	fontColor: "white",
+                	}
+
+	                    } ],
+	            yAxes: [ {
+	                display: true,
+	                gridLines: {
+	                	color: 'rgb(255,255,255)',
+	                    display: false,
+	                    drawBorder: true
+	                },
+	                scaleLabel: {
+	                    display: false,
+	                    labelString: 'Price'
+	                },
+	                ticks: {
+                    fontColor: "white",
+                	}
+	                    } ]
+	        },
+	        title: {
+	            display: false,
+	            text: 'Normal Legend'
+	        }
+
+
+	    }
+	} );
+
+
+	var ctx = document.getElementById("downtrend-chart");
+	ctx.height = 190;
+	var downtrendChart = new Chart( ctx, {
+	    type: 'line',
+	    data: {
+	        labels: currLabelDowntrend,
+	        type: 'line',
+	        defaultFontFamily: 'Montserrat',
+	        datasets: [ {
+	            label: "Actual Price",
+	            lineTension: 0.1,
+	            data: currPriceDowntrend,
+	            fill: false,
+	            backgroundColor: 'transparent',
+	            borderColor: 'rgb(255,255,255)',
+	            borderWidth: 3,
+	            pointStyle: 'circle',
+	            pointRadius: 0,
+	            pointBorderColor: 'transparent',
+	            pointBackgroundColor: 'black',
+	                },{
+
+	            label: "Predicted Price",
+	            lineTension: 0,
+	            data: downtrendPredict,
+	            fill: false,
+	            backgroundColor: 'transparent',
+	            borderColor: 'rgba(0,0,255)',
+	            borderWidth: 3,
+	            pointStyle: 'circle',
+	            pointRadius: 0,
+	            pointBorderColor: 'transparent',
+	            pointBackgroundColor: 'rgba(0,0,255)',
+
+	                }, 
+	                	]
+	    },
+	    options: {
+	        responsive: true,
+	        maintainAspectRatio: true,
+
+	        tooltips: {
+	            mode: 'index',
+	            titleFontSize: 12,
+	            titleFontColor: '#000',
+	            bodyFontColor: '#000',
+	            backgroundColor: '#fff',
+	            titleFontFamily: 'Montserrat',
+	            bodyFontFamily: 'Montserrat',
+	            cornerRadius: 3,
+	            intersect: false,
+	        },
+	        legend: {
+	        	display:false,
+
+	        },
+	        scales: {
+	            xAxes: [ {
+	            	
+
+	                display: true,
+	                gridLines: {
+	                	color: 'rgb(255,255,255)',
+	                    display: false,
+	                    drawBorder: true
+	                },
+	                scaleLabel: {
+	                    display: false,
+	                    labelString: 'Day'
+	                },
+	                ticks: {
+                    	fontColor: "white",
+                	}
+
+	                    } ],
+	            yAxes: [ {
+	                display: true,
+	                gridLines: {
+	                	color: 'rgb(255,255,255)',
+	                    display: false,
+	                    drawBorder: true
+	                },
+	                scaleLabel: {
+	                    display: false,
+	                    labelString: 'Price'
+	                },
+	                ticks: {
+                    fontColor: "white",
+                	}
+	                    } ]
+	        },
+	        title: {
+	            display: false,
+	            text: 'Normal Legend'
+	        }
+
+
+	    }
+	} );
+
+	setTimeout(function() { uptrendChart.update(); }, 500);
+	setTimeout(function() { downtrendChart.update(); }, 500);
+
+	
+	$('#porttable tr').click(function() {
+        var symbol = $(this).find("td.symbol").text();
+        if(symbol) {
+
+            window.location.href="/stock/?q="+ symbol;
+        }
+    });
+
+
+    $('#uptable tr').click(function() {
+        var symbol = $(this).find("td.symbol").text();
+        if(symbol) {
+
+            window.location.href="/stock/?q="+ symbol;
+        }
+    });
+
+    $('#downtable tr').click(function() {
+        var symbol = $(this).find("td.symbol").text();
+        if(symbol) {
+
+            window.location.href="/stock/?q="+ symbol;
+        }
+    });
+
+</script>
+
+
+{% endblock %}	
+			

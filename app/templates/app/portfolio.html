@@ -1,0 +1,178 @@
+{% extends "app/header.html" %}
+{% load static from staticfiles %}
+
+{% block nav_home%}
+    class="active"
+{% endblock %}
+
+{% block content %}
+<!-- MAIN CODE -->
+<!-- START -->
+
+<ol class="breadcrumb">
+	<li class="breadcrumb-item active">Portfolio</li>
+</ol>
+
+
+<div class="row">
+	<div class="col">
+
+
+		<div class="card">
+
+			<div class="card-header">
+            	Portfolio
+            </div>
+
+			<div class="card-body">
+			  	<!-- Button trigger modal -->
+				<button type="button" class="btn btn-outline-info waves-effect" data-toggle="modal" data-target="#addSymbolModal">
+				  + Add symbol
+				</button>
+
+				<button type="button" class="btn btn-outline-info waves-effect" data-toggle="modal" data-target="#deleteModal">
+				  Delete
+				</button>
+
+				<!-- Modal -->
+				<div class="modal fade" id="addSymbolModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+					<div class="modal-dialog modal-dialog-centered" role="document">
+						<div class="modal-content">
+
+							<div class="modal-header">
+								<h5 class="modal-title" id="exampleModalLongTitle">Add Symbols To List</h5>
+								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								  <span aria-hidden="true">&times;</span>
+								</button>
+							</div>
+						  
+
+						  	<form method="post">
+								<div class="modal-body">
+									<div class="container">
+											<!-- Search by TICKER -->
+											<div class="form-group has-search">
+												<span class="form-control-feedback"></span>
+												{% csrf_token %}
+												{{ form.as_p }}
+												<!-- <input type="text" class="form-control" placeholder="Search" ng-model="stockInput"> -->
+
+											</div>
+							
+									</div>
+								</div>
+								<!-- ng-click="saveData()"" -->
+								<div class="modal-footer">
+									<button type="submit" class="btn btn-secondary">Add</button>
+									<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+								</div>
+							</form>
+
+						</div>
+					</div>
+				</div>
+
+				<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+					<div class="modal-dialog modal-dialog-centered" role="document">
+						<div class="modal-content">
+
+							<div class="modal-header">
+								<h5 class="modal-title" id="exampleModalLongTitle">Delete Symbols</h5>
+								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								  <span aria-hidden="true">&times;</span>
+								</button>
+							</div>
+						  
+
+						  	<form method="post" action="{% url 'deleteSymbol' %}">
+								<div class="modal-body">
+									<div class="container">
+											<!-- Search by TICKER -->
+											<div class="form-group has-search">
+												<span class="form-control-feedback"></span>
+													{% csrf_token %}
+													{{ form.as_p }}
+
+											</div>
+							
+									</div>
+								</div>
+								<!-- ng-click="saveData()"" -->
+								<div class="modal-footer">
+									<button type="submit" class="btn btn-secondary">Delete</button>
+									<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+								</div>
+							</form>
+
+
+						</div>
+					</div>
+				</div>
+
+				<br>
+				<br>
+					
+				
+				{% if portfolio %}
+
+				<table class="table table-hover" class="portfoliotable" id="porttable">
+					<thead>
+					  <tr>
+					  	<th scope="col">Name</th>
+			            <th scope="col">Price</th>
+			            <th scope="col">Volume</th>
+			            <th scope="col">EPS</th>
+			            <th scope="col">DPS</th>
+			            <th scope="col">NTA</th>
+			            <th scope="col">PE</th>
+			            <th scope="col">DY</th>
+			            <th scope="col">ROE</th>
+			            <th scope="col">PTBV</th>
+			            <th scope="col">M.Cap</th>
+					  </tr>
+					</thead>
+
+
+					<tbody>
+					{% for item in portfolio %}
+						<tr class='clickable-row' >
+							<td class="symbol">{{ item.symbols }}</td>
+							<td>{{ item.portfolio_info.companyprice }}</td>
+							<td>{{ item.portfolio_info.companyvolume }}</td>
+							<td>{{ item.portfolio_info.companyeps }}</td>
+							<td>{{ item.portfolio_info.companydps }}</td>
+							<td>{{ item.portfolio_info.companynta }}</td>
+							<td>{{ item.portfolio_info.companype }}</td>
+							<td>{{ item.portfolio_info.companydy }}</td>
+							<td>{{ item.portfolio_info.companyroe }}</td>
+							<td>{{ item.portfolio_info.companyptbv }}</td>
+							<td>{{ item.portfolio_info.companymcap }}</td>
+						</tr>
+					{% endfor %}
+					</tbody>
+
+				</table>	
+
+				{% else %}
+					<p>Your current portfolio is empty. </p>
+
+				{% endif %}
+
+				<script>
+
+					$('#porttable tr').click(function() {
+				        var symbol = $(this).find("td.symbol").text();
+				        if(symbol) {
+
+				            window.location.href="/stock/?q="+ symbol;
+				        }
+				    });
+
+				</script>
+			</div>
+		</div>
+	</div>
+</div>
+
+{% endblock %}	
+			
